@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vignesh Gopal Kalaivani</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Vignesh Gopal Kalaivani: SOC analyst and IT support candidate in Oshawa, ON. CompTIA Security+, M.Sc. IT Security, TryHackMe top 5%.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single-column analyst "case file" — header strip, then sections read like a report, projects as alert cards tagged with MITRE IDs */
+:root{
+  --bg:#f4f6f9; --surface:#ffffff; --ink:#0b1520; --muted:#3f4b59; --line:#c6d0db;
+  --accent:#0b4f8a; --accent-soft:#dde9f5; --signal:#a24a06; --signal-soft:#fbe9d8; --ok:#1f6e3f;
+  --display:"Familjen Grotesk","Helvetica Neue",Arial,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1720; --surface:#16212d; --ink:#e4eaf1; --muted:#97a5b5; --line:#263444;
+  --accent:#6fb0e6; --accent-soft:#1a3044; --signal:#f0a35c; --signal-soft:#3a2716; --ok:#6cc893; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1720; --surface:#16212d; --ink:#e4eaf1; --muted:#97a5b5; --line:#263444;
+  --accent:#6fb0e6; --accent-soft:#1a3044; --signal:#f0a35c; --signal-soft:#3a2716; --ok:#6cc893; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+a{color:var(--accent);text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.wrap{max-width:980px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+.label{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+/* contrast bands: full-bleed sections that flip to the opposite palette */
+.band{--bg:#0a1520;--surface:#122130;--ink:#f4f8fb;--muted:#b3c2d1;--line:#2a3c4f;--accent:#5fb4ff;--accent-soft:#1a3550;--signal:#ffb066;--signal-soft:#3d2814;--ok:#5fd394;
+  background:var(--bg);color:var(--ink);box-shadow:0 0 0 100vmax var(--bg);clip-path:inset(0 -100vmax);border-top:0;color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .band{--bg:#eef3f8;--surface:#ffffff;--ink:#0b1520;--muted:#3f4b59;--line:#c6d0db;--accent:#0b4f8a;--accent-soft:#dde9f5;--signal:#a24a06;--signal-soft:#fbe9d8;--ok:#1f6e3f;color-scheme:light}}
+:root[data-theme="dark"] .band{--bg:#eef3f8;--surface:#ffffff;--ink:#0b1520;--muted:#3f4b59;--line:#c6d0db;--accent:#0b4f8a;--accent-soft:#dde9f5;--signal:#a24a06;--signal-soft:#fbe9d8;--ok:#1f6e3f;color-scheme:light}
+
+/* top nav */
+nav.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line);
+  margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)));
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+nav.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px;flex-wrap:wrap}
+.mark{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--ink);text-decoration:none}
+.mark b{color:var(--accent)}
+nav.top ul{list-style:none;display:flex;gap:18px;margin:0;padding:0;flex-wrap:wrap}
+nav.top ul a{color:var(--muted);text-decoration:none;font-size:14px}
+nav.top ul a:hover{color:var(--ink)}
+
+/* hero */
+.hero{padding-block:56px 40px;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:40px;align-items:end}
+.status{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--ok);
+  border:1px solid var(--line);background:var(--surface);padding:4px 10px;border-radius:999px;margin-bottom:22px}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 25%,transparent)}
+.hero h1{font-size:clamp(38px,6.4vw,64px);font-weight:700;letter-spacing:-.02em}
+.hero h1 span{display:block;color:var(--accent)}
+.hero p.lede{font-size:18px;color:var(--muted);max-width:56ch;margin:20px 0 0}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;padding:11px 18px;border-radius:8px;text-decoration:none;border:1px solid var(--accent);cursor:pointer;font-family:var(--body)}
+.btn.primary{background:var(--accent);color:var(--surface)}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn:hover{filter:brightness(1.08)}
+
+/* readout panel */
+.readout{background:var(--surface);border:1px solid var(--line);border-radius:10px;font-family:var(--mono);font-size:13px}
+.readout header{display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--line);color:var(--muted)}
+.readout dl{margin:0;padding:6px 14px 10px;display:grid;grid-template-columns:auto 1fr;column-gap:16px}
+.readout dt{color:var(--muted);padding-block:7px;border-bottom:1px dashed var(--line)}
+.readout dd{margin:0;padding-block:7px;border-bottom:1px dashed var(--line);text-align:right;font-weight:500}
+.readout dt:last-of-type,.readout dd:last-of-type{border-bottom:0}
+
+/* sections */
+section{padding-block:48px;border-top:1px solid var(--line)}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:28px}
+.sec-head h2{font-size:clamp(26px,3.6vw,34px);font-weight:600}
+.about{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:40px}
+.about p{margin:0 0 14px;max-width:64ch}
+.facts{display:grid;gap:10px;align-content:start}
+.fact{display:flex;gap:14px;align-items:baseline;padding:14px 16px;background:var(--surface);border:1px solid var(--line);border-radius:8px}
+.fact strong{font-family:var(--display);font-size:24px;min-width:68px;color:var(--accent);font-variant-numeric:tabular-nums}
+.fact span{color:var(--muted);font-size:14px}
+
+/* skills */
+.skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:22px 32px}
+.skill h3{font-size:17px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.skill h3 em{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--muted);font-weight:400}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
+.chips li{font-size:13px;padding:3px 9px;border-radius:5px;background:var(--accent-soft);color:var(--ink)}
+
+/* projects */
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.filters button{font-family:var(--mono);font-size:12px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--muted);cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.projects{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(440px,100%),1fr));gap:16px}
+.proj{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.proj .meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.sev{font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:4px;letter-spacing:.04em}
+.sev.sec{background:var(--signal-soft);color:var(--signal)}
+.sev.it{background:var(--accent-soft);color:var(--accent)}
+.proj h3{font-size:20px;font-weight:600}
+.proj p{margin:0;color:var(--muted);font-size:15px}
+.proj ul.pts{margin:0;padding-left:18px;font-size:15px}
+.proj ul.pts li{margin-bottom:4px}
+.tools{font-family:var(--mono);font-size:12px;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px;margin-top:auto;display:flex;flex-wrap:wrap;gap:4px 12px}
+.ttp{display:flex;gap:6px;flex-wrap:wrap}
+.ttp span{font-family:var(--mono);font-size:11px;border:1px solid var(--line);padding:1px 6px;border-radius:4px;color:var(--ink)}
+
+/* timeline */
+.timeline{position:relative;margin:0;padding:0;list-style:none}
+.timeline::before{content:"";position:absolute;left:96px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.timeline>li{display:grid;grid-template-columns:80px minmax(0,1fr);gap:36px;padding-bottom:28px;position:relative}
+.timeline>li::after{content:"";position:absolute;left:91px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--surface);border:2px solid var(--accent)}
+.timeline>li.edu::after{border-color:var(--signal)}
+.when{font-family:var(--mono);font-size:13px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+.timeline h3{font-size:18px;font-weight:600}
+.timeline .org{color:var(--muted);font-size:14px;margin:2px 0 8px}
+.timeline ul{margin:0;padding-left:18px;font-size:15px}
+
+/* credentials */
+.creds{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:12px}
+.cred{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px}
+.cred .label{display:block;margin-bottom:8px}
+.cred strong{display:block;font-family:var(--display);font-size:18px;line-height:1.25}
+.cred span{color:var(--muted);font-size:14px}
+
+/* contact */
+.contact{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:start}
+.contact p{color:var(--muted);max-width:48ch;margin:12px 0 0}
+.lines{display:grid;gap:10px}
+.line{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;background:var(--surface);border:1px solid var(--line);border-radius:8px;min-width:0}
+.line div{min-width:0}
+.line .v{font-family:var(--mono);font-size:14px;overflow-wrap:anywhere;user-select:all}
+.line button,.line a.go{font-family:var(--mono);font-size:12px;padding:5px 10px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;text-decoration:none;white-space:nowrap}
+footer{border-top:1px solid var(--line);padding-block:24px 40px;color:var(--muted);font-size:13px;font-family:var(--mono);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@media (max-width:760px){
+  .hero,.about,.contact{grid-template-columns:minmax(0,1fr)}
+  .hero{padding-block:36px 32px;gap:28px}
+  nav.top ul{gap:12px}
+  .timeline::before{left:6px}
+  .timeline>li{grid-template-columns:minmax(0,1fr);gap:4px;padding-left:28px}
+  .timeline>li::after{left:1px}
+  .when{text-align:left}
+}
+</style>
+</head>
+<body>
+
+<nav class="top" aria-label="Sections">
+  <div class="wrap">
+    <a class="mark" href="#top">vignesh<b>@</b>soc:~$</a>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="wrap" id="top">
+  <div class="band"><header class="hero">
+    <div>
+      <div class="status"><i></i>Open to SOC Analyst and IT Support roles · GTA / Durham</div>
+      <h1>Vignesh Gopal Kalaivani<span>SOC Analyst &amp; IT Support</span></h1>
+      <p class="lede">I monitor, triage and document. Security+ certified with an M.Sc. in IT Security, two years of government IT support, and hands on labs in Wazuh, Splunk, Active Directory and AWS.</p>
+      <div class="cta">
+        <a class="btn primary" href="#projects">View projects</a>
+        <a class="btn ghost" href="#contact">Contact me</a>
+      </div>
+    </div>
+    <aside class="readout" aria-label="Profile summary">
+      <header><span>analyst_profile</span><span>TLP:CLEAR</span></header>
+      <dl>
+        <dt>location</dt><dd>Oshawa, ON</dd>
+        <dt>certification</dt><dd>CompTIA Security+</dd>
+        <dt>degree</dt><dd>M.Sc. IT Security</dd>
+        <dt>tryhackme</dt><dd>Top 5% globally</dd>
+        <dt>it_support</dt><dd>2 years</dd>
+        <dt>siem</dt><dd>Wazuh · Splunk</dd>
+      </dl>
+    </aside>
+  </header></div>
+
+  <section id="about">
+    <div class="sec-head"><h2>About</h2><span class="label">summary</span></div>
+    <div class="about">
+      <div>
+        <p>I'm a cybersecurity graduate from Ontario Tech University and a CompTIA Security+ holder, looking for my first role as a SOC Analyst (L1) or in IT support. I rank in the top 5% globally on TryHackMe.</p>
+        <p>Before moving to Canada I spent two years as a Senior Computer Operator at the Tamil Nadu Tourism Development Corporation, where I handled user accounts and access, patching, ticketing and hands on troubleshooting across government offices.</p>
+        <p>Through a six month hands on cybersecurity bootcamp (Feb to Jul 2026) I built security labs end to end: a three VM SOC lab with Wazuh, Suricata and a Cowrie honeypot, custom Wazuh rules that detect account takeover, a phishing investigation, malware analysis of a live sample, and a full web app pentest. Every investigation ends in a clear, evidence based report.</p>
+      </div>
+      <div class="facts">
+        <div class="fact"><strong>5</strong><span>custom Wazuh correlation rules written for account takeover detection</span></div>
+        <div class="fact"><strong>14</strong><span>section vulnerability assessment report for the OWASP Juice Shop pentest</span></div>
+        <div class="fact"><strong>3</strong><span>VM SOC home lab: Kali, Debian, Windows Server 2025</span></div>
+        <div class="fact"><strong>2 yrs</strong><span>government IT support: access, patching, tickets</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" class="band">
+    <div class="sec-head"><h2>Expertise</h2><span class="label">core skills</span></div>
+    <div class="skills">
+      <div class="skill"><h3>Security Monitoring <em>SOC</em></h3>
+        <ul class="chips"><li>Wazuh SIEM</li><li>Splunk</li><li>Alert triage</li><li>Log correlation</li><li>Custom detection rules</li><li>Escalation</li></ul></div>
+      <div class="skill"><h3>Incident Response <em>SOC</em></h3>
+        <ul class="chips"><li>NIST SP 800-61</li><li>MITRE ATT&amp;CK</li><li>Phishing analysis</li><li>Threat hunting</li><li>Incident reporting</li></ul></div>
+      <div class="skill"><h3>Threat &amp; Log Analysis <em>SOC</em></h3>
+        <ul class="chips"><li>Windows Event Logs</li><li>Wireshark</li><li>IoC extraction</li><li>VirusTotal</li><li>AbuseIPDB</li><li>YARA</li><li>Ghidra</li></ul></div>
+      <div class="skill"><h3>Network Security <em>SOC · IT</em></h3>
+        <ul class="chips"><li>Suricata</li><li>Snort 3</li><li>pfSense</li><li>fail2ban</li><li>Nmap</li><li>TCP/IP</li><li>DNS · DHCP</li></ul></div>
+      <div class="skill"><h3>Identity &amp; Cloud <em>IAM · IT</em></h3>
+        <ul class="chips"><li>Active Directory</li><li>Okta SSO</li><li>Microsoft 365</li><li>Least privilege</li><li>AWS IAM · EC2 · CloudTrail</li><li>Azure</li></ul></div>
+      <div class="skill"><h3>End User Support <em>IT</em></h3>
+        <ul class="chips"><li>Help desk</li><li>Hardware &amp; software troubleshooting</li><li>Remote support</li><li>Ticketing</li><li>Windows · Linux</li><li>CIS Benchmarks</li></ul></div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="sec-head">
+      <h2>Projects</h2>
+      <div class="filters" role="group" aria-label="Filter projects">
+        <button type="button" id="f-all" data-f="all" aria-pressed="true">All</button>
+        <button type="button" id="f-sec" data-f="sec" aria-pressed="false">Security</button>
+        <button type="button" id="f-it" data-f="it" aria-pressed="false">IT &amp; Infrastructure</button>
+      </div>
+    </div>
+    <div class="projects" id="projects-grid">
+
+      <article class="proj" data-cat="sec">
+        <div class="meta"><span class="sev sec">DETECTION · LEVEL 14</span><div class="ttp"><span>T1110</span><span>T1078</span></div></div>
+        <h3>Account Takeover Detection (FinSOC 01)</h3>
+        <ul class="pts">
+          <li>Built a decoy banking login on Apache and PHP, then simulated credential stuffing against it with Hydra.</li>
+          <li>Wrote 5 custom Wazuh correlation rules (IDs 100100 to 100104) chained off built in rule 31108, raising level 14 takeover alerts, and built a custom Wazuh dashboard.</li>
+        </ul>
+        <div class="tools"><span>Wazuh</span><span>Hydra</span><span>Apache</span><span>PHP</span></div>
+      </article>
+
+      <article class="proj" data-cat="sec">
+        <div class="meta"><span class="sev sec">THREAT HUNTING · IR</span><div class="ttp"><span>NIST 800-61</span></div></div>
+        <h3>SOC Home Lab: Threat Hunting &amp; Incident Response</h3>
+        <ul class="pts">
+          <li>Deployed a three VM lab (Kali, Debian, Windows Server 2025) with Wazuh SIEM, Suricata IDS and a Cowrie SSH honeypot.</li>
+          <li>Triaged SSH brute force by correlating Wazuh alerts, honeypot logs and Windows events, then wrote an incident response report mapped to NIST SP 800-61 and MITRE ATT&amp;CK.</li>
+        </ul>
+        <div class="tools"><span>Wazuh</span><span>Suricata</span><span>Cowrie</span><span>VirtualBox</span></div>
+      </article>
+
+      <article class="proj" data-cat="sec">
+        <div class="meta"><span class="sev sec">PHISHING TRIAGE</span><div class="ttp"><span>T1566.002</span><span>T1204.001</span></div></div>
+        <h3>Phishing Email Triage Report</h3>
+        <ul class="pts">
+          <li>Investigated a real phishing email and found SPF, DKIM and DMARC failures and a credential harvesting URL.</li>
+          <li>Built an IoC table, mapped the attack to MITRE ATT&amp;CK and wrote a verdict with containment and user awareness steps.</li>
+        </ul>
+        <div class="tools"><span>VirusTotal</span><span>AbuseIPDB</span><span>urlscan.io</span><span>MXToolbox</span></div>
+      </article>
+
+      <article class="proj" data-cat="sec">
+        <div class="meta"><span class="sev sec">MALWARE ANALYSIS</span><div class="ttp"><span>YARA</span></div></div>
+        <h3>Malware Analysis of a Live Sample</h3>
+        <ul class="pts">
+          <li>Built a dedicated analysis VM with a 10 tool stack and pulled a live sample from MalwareBazaar.</li>
+          <li>Identified a multi stage loader using process injection, DPAPI credential theft and encrypted C2; extracted IoCs, wrote YARA rules and documented mitigations.</li>
+        </ul>
+        <div class="tools"><span>Ghidra</span><span>PEStudio</span><span>Process Monitor</span><span>RegShot</span><span>YARA</span></div>
+      </article>
+
+      <article class="proj" data-cat="sec">
+        <div class="meta"><span class="sev sec">WEB APP PENTEST</span><div class="ttp"><span>OWASP Top 10</span></div></div>
+        <h3>OWASP Juice Shop Penetration Test</h3>
+        <ul class="pts">
+          <li>Exploited SQL injection, DOM based XSS, broken authentication and IDOR, then fixed them in source with parameterized queries and rate limiting.</li>
+          <li>Delivered a 14 section vulnerability assessment report with findings, evidence and before and after remediation.</li>
+        </ul>
+        <div class="tools"><span>Burp Suite</span><span>OWASP ZAP</span><span>SQLMap</span><span>Docker</span></div>
+      </article>
+
+      <article class="proj" data-cat="sec it">
+        <div class="meta"><span class="sev sec">NETWORK DEFENCE</span><div class="ttp"><span>IDS/IPS</span></div></div>
+        <h3>Firewall &amp; Intrusion Detection Lab</h3>
+        <ul class="pts">
+          <li>Set up a pfSense firewall and Snort 3 (built from source) to detect port scans, brute force and DoS attacks, with fail2ban blocking sources automatically.</li>
+          <li>Diagnosed host based versus network based firewall behaviour and planned VLAN segmentation.</li>
+        </ul>
+        <div class="tools"><span>pfSense</span><span>Snort 3</span><span>fail2ban</span><span>Kali</span><span>Debian</span></div>
+      </article>
+
+      <article class="proj" data-cat="it">
+        <div class="meta"><span class="sev it">CLOUD · HARDENING</span><div class="ttp"><span>CIS Benchmarks</span></div></div>
+        <h3>AWS Server Setup &amp; Hardening</h3>
+        <ul class="pts">
+          <li>Deployed an Apache web server on EC2, created least privilege IAM policies and configured CloudTrail and CloudWatch monitoring.</li>
+          <li>Hardened a Debian server against CIS Benchmarks and verified the result with Lynis audits.</li>
+        </ul>
+        <div class="tools"><span>EC2</span><span>IAM</span><span>CloudTrail</span><span>CloudWatch</span><span>Lynis</span></div>
+      </article>
+
+      <article class="proj" data-cat="it">
+        <div class="meta"><span class="sev it">IDENTITY · IAM</span><div class="ttp"><span>SSO</span></div></div>
+        <h3>Active Directory &amp; Okta SSO</h3>
+        <ul class="pts">
+          <li>Set up a cloud based Active Directory environment with user, group and policy management.</li>
+          <li>Implemented Okta SSO for centralized identity and single sign on.</li>
+        </ul>
+        <div class="tools"><span>Active Directory</span><span>Okta</span><span>Azure</span></div>
+      </article>
+
+    </div>
+    <p style="margin:20px 0 0;color:var(--muted);font-size:15px">Write ups and code: <a href="https://github.com/vignnesh9" target="_blank" rel="noopener">github.com/vignnesh9</a></p>
+  </section>
+
+  <section id="experience" class="band">
+    <div class="sec-head"><h2>Career timeline</h2><span class="label">experience · education</span></div>
+    <ol class="timeline">
+      <li>
+        <div class="when">2026</div>
+        <div><h3>Cybersecurity Bootcamp: Hands on Projects</h3><div class="org">Feb 2026 to Jul 2026 (6 months)</div>
+          <ul>
+            <li>Completed five hands on projects: firewall and IDS lab (pfSense, Snort 3), AWS cloud security and hardening, OWASP Juice Shop penetration test, malware analysis, and a Wazuh SIEM home lab.</li>
+            <li>Worked in daily scrums with homework, self learning and progress updates, delivering a written report for every project.</li>
+            <li>Mapped findings to MITRE ATT&amp;CK, NIST SP 800-61 and CIS Benchmarks.</li>
+          </ul></div>
+      </li>
+      <li class="edu">
+        <div class="when">2026</div>
+        <div><h3>CompTIA Security+</h3><div class="org">Certified May 2026</div></div>
+      </li>
+      <li class="edu">
+        <div class="when">2024–25</div>
+        <div><h3>M.Sc. Information Technology Security</h3><div class="org">Ontario Tech University, Oshawa, ON · Completed Dec 2025</div></div>
+      </li>
+      <li>
+        <div class="when">2022–24</div>
+        <div><h3>Senior Computer Operator (IT Systems Support)</h3><div class="org">Tamil Nadu Tourism Development Corporation · Aug 2022 to Jul 2024</div>
+          <ul>
+            <li>Managed account provisioning, access changes and deprovisioning, enforcing least privilege.</li>
+            <li>Resolved hardware, software and network issues remotely and in person across government offices.</li>
+            <li>Installed and maintained workstations, routers and switches; applied patches and updates.</li>
+            <li>Logged, tracked and escalated tickets through to closure, and documented recurring fixes.</li>
+          </ul></div>
+      </li>
+      <li class="edu">
+        <div class="when">2018</div>
+        <div><h3>B.E. Computer Science and Engineering</h3><div class="org">Panimalar Engineering College, Chennai, India</div></div>
+      </li>
+    </ol>
+  </section>
+
+  <section id="credentials">
+    <div class="sec-head"><h2>Credentials</h2><span class="label">verified</span></div>
+    <div class="creds">
+      <div class="cred"><span class="label">Certification</span><strong>CompTIA Security+</strong><span>May 2026</span></div>
+      <div class="cred"><span class="label">Degree</span><strong>M.Sc. IT Security</strong><span>Ontario Tech University · 2025</span></div>
+      <div class="cred"><span class="label">Ranking</span><strong>TryHackMe Top 5%</strong><span>Global leaderboard</span></div>
+      <div class="cred"><span class="label">Degree</span><strong>B.E. Computer Science</strong><span>Panimalar Engineering College · 2018</span></div>
+    </div>
+  </section>
+
+  <section id="contact" class="band">
+    <div class="contact">
+      <div>
+        <h2 style="font-size:clamp(26px,3.6vw,34px);font-weight:600">Let's work together</h2>
+        <p>I'm looking for SOC Analyst (L1), Junior Security Analyst and IT Support roles in the Greater Toronto Area and Durham Region. The quickest way to reach me is email or LinkedIn.</p>
+      </div>
+      <div class="lines">
+        <div class="line"><div><span class="label">Email</span><div class="v" id="v-email">vigneshkalaivanjbs@gmail.com</div></div><button type="button" data-copy="v-email">Copy</button></div>
+        <div class="line"><div><span class="label">LinkedIn</span><div class="v">linkedin.com/in/vigneshgk9securityanalyst</div></div><a class="go" href="https://www.linkedin.com/in/vigneshgk9securityanalyst" target="_blank" rel="noopener">Open</a></div>
+        <div class="line"><div><span class="label">GitHub</span><div class="v">github.com/vignnesh9</div></div><a class="go" href="https://github.com/vignnesh9" target="_blank" rel="noopener">Open</a></div>
+      </div>
+    </div>
+  </section>
+
+  <footer><span>© 2026 Vignesh Gopal Kalaivani</span><span>Oshawa, Ontario</span></footer>
+</main>
+
+<script>
+(function(){
+  var btns=document.querySelectorAll('.filters button');
+  var cards=document.querySelectorAll('#projects-grid .proj');
+  btns.forEach(function(b){b.addEventListener('click',function(){
+    var f=b.getAttribute('data-f');
+    btns.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});
+    cards.forEach(function(c){var cats=c.getAttribute('data-cat').split(' ');c.hidden=!(f==='all'||cats.indexOf(f)>-1)});
+  })});
+  document.querySelectorAll('[data-copy]').forEach(function(b){b.addEventListener('click',function(){
+    var el=document.getElementById(b.getAttribute('data-copy'));var t=el.textContent.trim();
+    function done(msg){b.textContent=msg;setTimeout(function(){b.textContent='Copy'},1600)}
+    function sel(){var r=document.createRange();r.selectNodeContents(el);var s=window.getSelection();s.removeAllRanges();s.addRange(r);done('Selected')}
+    try{navigator.clipboard.writeText(t).then(function(){done('Copied')},sel)}catch(e){sel()}
+  })});
+})();
+</script>
+</body>
+</html>
